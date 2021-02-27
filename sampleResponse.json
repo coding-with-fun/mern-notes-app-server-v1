@@ -1,0 +1,8 @@
+{
+	"200": {
+		"success": "{data}"
+	},
+	"400": {
+		"error": "{error message}"
+	}
+}
