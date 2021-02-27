@@ -5,7 +5,7 @@
 
 const crypto = require('crypto');
 const mongoose = require('mongoose');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 
 const { ObjectId } = mongoose.Schema;
 
