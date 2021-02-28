@@ -3,6 +3,11 @@
  * @description Authentication controller.
  */
 
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+require('colors');
+require('dotenv').config();
+
 const User = require('../models/user');
 
 /**
@@ -13,13 +18,60 @@ const User = require('../models/user');
  */
 exports.signup = async (req, res) => {
     try {
+        /**
+         * @description Check if user exists with given username.
+         * @param Username
+         */
+        const existingUser = await User.findOne({
+            userName: req.body.userName,
+        });
+        if (existingUser) {
+            return res.status(400).json({
+                error: {
+                    message: 'User already exists.',
+                },
+            });
+        }
+
+        /**
+         * @description Create new user and save it.
+         * @param Request Body
+         */
         const user = new User(req.body);
         await user.save();
+
+        /**
+         * @description Generate token using jsonwebtoken package.
+         *              Set token to cookie.
+         *              Return the user details with token.
+         * @param User ID
+         * @param A string as salt
+         */
+        const token = jwt.sign(
+            {
+                _id: user._id,
+            },
+            process.env.SECRET
+        );
+        res.cookie('mern-notes-app-user-token', token);
         return res.status(200).json({
-            success: user,
+            success: {
+                token,
+                message: 'User created successfully.',
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    userName: user.userName,
+                },
+            },
         });
-    } catch (e) {
-        return res.send(e);
+    } catch (error) {
+        console.log(`${error.message}`.red);
+        return res.status(500).json({
+            error: {
+                message: 'Internal server error.',
+            },
+        });
     }
 };
 
@@ -31,12 +83,60 @@ exports.signup = async (req, res) => {
  */
 exports.signin = async (req, res) => {
     try {
-        const user = new User(req.body);
-        await user.save();
+        const { userName, password } = req.body;
+        const user = await User.findOne({ userName });
+
+        if (user) {
+            return res.status(401).json({
+                error: {
+                    message: 'User already exists.',
+                },
+            });
+        }
+
+        /**
+         * @description Checks if user is present with provided username or
+         *              password if is matched with matched with database.
+         */
+        if (!user || !user.authenticate(password)) {
+            return res.status(401).json({
+                error: {
+                    message: 'Please check credentials.',
+                },
+            });
+        }
+
+        /**
+         * @description Generate token using jsonwebtoken package.
+         *              Set token to cookie.
+         *              Return the user details with token.
+         * @param User ID
+         * @param A string as salt
+         */
+        const token = jwt.sign(
+            {
+                _id: user._id,
+            },
+            process.env.SECRET
+        );
+        res.cookie('mern-notes-app-user-token', token);
         return res.status(200).json({
-            success: user,
+            success: {
+                token,
+                message: 'User signed in successfully',
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    userName: user.userName,
+                },
+            },
         });
-    } catch (e) {
-        return res.send(e);
+    } catch (error) {
+        console.log(`${error.message}`.red);
+        return res.status(500).json({
+            error: {
+                message: 'Internal server error.',
+            },
+        });
     }
 };
