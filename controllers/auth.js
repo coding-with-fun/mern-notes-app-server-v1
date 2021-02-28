@@ -4,9 +4,7 @@
  */
 
 const jwt = require('jsonwebtoken');
-const expressJwt = require('express-jwt');
 require('colors');
-require('dotenv').config();
 
 const User = require('../models/user');
 
@@ -85,14 +83,6 @@ exports.signin = async (req, res) => {
     try {
         const { userName, password } = req.body;
         const user = await User.findOne({ userName });
-
-        if (user) {
-            return res.status(401).json({
-                error: {
-                    message: 'User already exists.',
-                },
-            });
-        }
 
         /**
          * @description Checks if user is present with provided username or
