@@ -20,6 +20,7 @@ const checks = {
     checkPassword: check('password')
         .isLength({ min: 5 })
         .withMessage('Password must be at least 5 characters long.'),
+    checkContent: check('title').notEmpty().withMessage('Content is required.'),
 };
 
 /**
@@ -35,6 +36,11 @@ const signUpCheckReq = () => [
  * @description Defining SignIn check.
  */
 const signInCheckReq = () => [checks.checkUserName, checks.checkPassword];
+
+/**
+ * @description Defining ToDo check.
+ */
+const todoCheckReq = () => [checks.checkContent];
 
 /**
  * @description Checking for errors.
@@ -56,4 +62,5 @@ const returnErrors = (req, res, next) => {
 module.exports = userValidator = {
     validateSignUp: [signUpCheckReq(), returnErrors],
     validateSignIn: [signInCheckReq(), returnErrors],
+    validateToDo: [todoCheckReq(), returnErrors],
 };

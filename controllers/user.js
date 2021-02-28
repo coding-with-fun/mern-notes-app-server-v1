@@ -6,6 +6,7 @@
 require('colors');
 
 const User = require('../models/user');
+const ToDo = require('../models/todo');
 
 /**
  * @type        GET
@@ -19,7 +20,9 @@ exports.userDetails = async (req, res) => {
 
         const user = await User.findOne({
             _id: userID,
-        }).select({ encryptedPassword: 0, salt: 0 });
+        })
+            .populate('todoList', '_id title isCompleted')
+            .select({ encryptedPassword: 0, salt: 0 });
 
         /**
          * @description Return error if no user is present by given ID.
@@ -65,7 +68,9 @@ exports.updateDetails = async (req, res) => {
             userID,
             req.body,
             options
-        ).select({ encryptedPassword: 0, salt: 0 });
+        )
+            .populate('todoList', '_id content isCompleted')
+            .select({ encryptedPassword: 0, salt: 0 });
 
         return res.status(200).json({
             success: {
