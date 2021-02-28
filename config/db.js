@@ -11,6 +11,7 @@ const connectDB = async () => {
     try {
         /**
          * @description Connection to MongoDB
+         * @param MONGO_URI
          */
         await mongoose.connect(process.env.MONGO_URI, {
             useNewUrlParser: true,

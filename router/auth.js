@@ -4,21 +4,26 @@
  */
 
 const express = require('express');
-const { check } = require('express-validator');
 
-const { signup } = require('../controllers/auth');
+const { signup, signin } = require('../controllers/auth');
+const { validateSignUp, validateSignIn } = require('../shared/checkReq');
 
 const router = express.Router();
 
-router.post(
-    '/signup',
-    check('userName')
-        .isLength({ min: 5 })
-        .withMessage('Username must be at least 5 characters long.'),
-    check('password')
-        .isLength({ min: 5 })
-        .withMessage('Password must be at least 5 characters long.'),
-    signup
-);
+/**
+ * @type        POST
+ * @route       /api/auth/signup
+ * @description SignUp Router
+ * @access      Public
+ */
+router.post('/signup', validateSignUp, signup);
+
+/**
+ * @type        POST
+ * @route       /api/auth/signin
+ * @description SignIn Router
+ * @access      Public
+ */
+router.post('/signin', validateSignIn, signin);
 
 module.exports = router;
