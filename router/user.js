@@ -5,12 +5,11 @@
 
 const express = require('express');
 
-const { authToken } = require('../middlewares/auth');
+const { userDetails } = require('../controllers/user');
+const { authenticateToken } = require('../middlewares/auth');
 
 const router = express.Router();
 
-router.get('/', authToken(), (req, res) => {
-    return res.json(req.auth);
-});
+router.get('/', authenticateToken(), userDetails);
 
 module.exports = router;
