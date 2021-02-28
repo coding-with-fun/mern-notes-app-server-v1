@@ -11,7 +11,7 @@ const User = require('../models/user');
 /**
  * @type        POST
  * @route       /api/auth/signup
- * @description User Signup controller
+ * @description User Signup controller.
  * @access      Public
  */
 exports.signup = async (req, res) => {
@@ -76,7 +76,7 @@ exports.signup = async (req, res) => {
 /**
  * @type        POST
  * @route       /api/auth/signin
- * @description User Signin controller
+ * @description User Signin controller.
  * @access      Public
  */
 exports.signin = async (req, res) => {
