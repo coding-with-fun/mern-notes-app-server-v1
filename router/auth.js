@@ -6,7 +6,7 @@
 const express = require('express');
 
 const { signup, signin } = require('../controllers/auth');
-const { validateSignUp, validateSignIn } = require('../shared/checkReq');
+const { validateSignUp, validateSignIn } = require('../middlewares/checkReq');
 
 const router = express.Router();
 

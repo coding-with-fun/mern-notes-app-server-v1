@@ -6,9 +6,11 @@
 const express = require('express');
 
 const authRoutes = require('./auth');
+const userRoutes = require('./user');
 
 const app = express();
 
 app.use('/api/auth', authRoutes);
+app.use('/api/test', userRoutes);
 
 module.exports = app;
