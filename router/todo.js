@@ -5,7 +5,7 @@
 
 const express = require('express');
 
-const { addToDo } = require('../controllers/todo');
+const { addToDo, deleteToDo } = require('../controllers/todo');
 const { authenticateToken } = require('../middlewares/auth');
 const { validateToDo } = require('../middlewares/checkReq');
 
@@ -18,5 +18,5 @@ const router = express.Router();
  * @access      Private
  */
 router.post('/add', authenticateToken(), validateToDo, addToDo);
-
+router.delete('/delete', authenticateToken(), deleteToDo);
 module.exports = router;

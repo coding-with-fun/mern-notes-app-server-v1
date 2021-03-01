@@ -41,3 +41,41 @@ exports.addToDo = async (req, res) => {
         });
     }
 };
+
+/**
+ * @type        DELETE
+ * @route       /api/todo/delete/id:id
+ * @description Delete ToDo controller.
+ * @access      Private
+ */
+exports.deleteToDo = async (req, res) => {
+    try {
+        const userID = req.auth;
+        const todoID = req.query.id;
+
+        const deletedToDo = await ToDo.findByIdAndDelete(todoID);
+        if (!deletedToDo) {
+            return res.status(404).json({
+                error: {
+                    message: 'Item is not present.',
+                },
+            });
+        }
+        await User.findByIdAndUpdate(userID, {
+            $pull: { todoList: todoID },
+        });
+
+        return res.status(200).json({
+            success: {
+                message: 'ToDo deleted successfully.',
+            },
+        });
+    } catch (error) {
+        console.log(`${error.message}`.red);
+        return res.status(500).json({
+            error: {
+                message: 'Internal server error.',
+            },
+        });
+    }
+};
