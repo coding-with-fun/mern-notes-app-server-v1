@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const ToDoSchema = mongoose.Schema(
     {
-        title: {
+        content: {
             type: String,
             trim: true,
             required: true,

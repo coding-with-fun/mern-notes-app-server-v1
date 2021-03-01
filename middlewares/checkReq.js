@@ -20,7 +20,9 @@ const checks = {
     checkPassword: check('password')
         .isLength({ min: 5 })
         .withMessage('Password must be at least 5 characters long.'),
-    checkContent: check('title').notEmpty().withMessage('Content is required.'),
+    checkContent: check('content')
+        .notEmpty()
+        .withMessage('Content is required.'),
 };
 
 /**

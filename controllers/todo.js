@@ -19,7 +19,7 @@ exports.addToDo = async (req, res) => {
         const userID = req.auth;
 
         const newToDo = new ToDo({
-            title: req.body.title,
+            content: req.body.content,
         });
         await newToDo.save();
 
